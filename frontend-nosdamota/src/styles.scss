@@ -1,0 +1,17 @@
+// Variáveis do Ateliê
+$primary-color: #6a1b9a; // Roxo Crochê
+$secondary-color: #ffd700; // Dourado
+$bg-light: #f4f4f9;
+
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+body {
+  background-color: $bg-light;
+  font-family: 'Poppins', sans-serif;
+}
+
+.card {
+  border-radius: 15px;
+  border: none;
+}
