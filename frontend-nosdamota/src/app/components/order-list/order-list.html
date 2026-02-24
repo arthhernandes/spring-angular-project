@@ -1,0 +1,28 @@
+<h2>Histórico de Pedidos 🧶</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Cliente</th>
+      <th>Produtos</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (order of orders(); track order.id) {
+      <tr>
+        <td>{{ order.date | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ order.customer.name }}</td>
+        <td>
+          <ul>
+            @for (p of order.product; track p.id) {
+              <li>{{ p.name }}</li>
+            }
+          </ul>
+        </td>
+        <td><strong>{{ order.price | currency:'BRL' }}</strong></td>
+      </tr>
+    }
+  </tbody>
+</table>

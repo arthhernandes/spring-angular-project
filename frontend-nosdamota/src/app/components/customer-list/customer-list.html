@@ -1,61 +1,51 @@
-<div class="card shadow-sm border-0">
-  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
-    <h5 class="mb-0">
-      <i class="bi bi-people-fill me-2"></i>
-      Clientes do Ateliê
-    </h5>
-    <span class="badge bg-light text-primary">
-      Total: {{ customers().length }}
-    </span>
-  </div>
+<div class="container mt-4">
+  <h2>Gestão de Clientes - Nós da Mota</h2>
 
-  <div class="table-responsive">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
+  <table class="table table-hover mt-3">
+    <thead class="table-dark">
+      <tr>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (c of customers(); track c.id) {
         <tr>
-          <th class="ps-4">Cliente</th>
-          <th>E-mail</th>
-          <th>Telefone</th>
-          <th class="text-end pe-4">Ações</th>
+          <td>{{ c.name }}</td>
+          <td>{{ c.email }}</td>
+          <td>{{ c.phone }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="delete(c.id)">Excluir</button>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        @for (c of customers(); track c.id) {
-          <tr>
-            <td class="ps-4">
-              <div class="d-flex align-items-center">
-                <div class="avatar-circle me-3">
-                  {{ c.name.charAt(0).toUpperCase() }}
-                </div>
-                <span class="fw-bold text-dark">{{ c.name }}</span>
-              </div>
-            </td>
-            <td>
-              <span class="text-muted">{{ c.email }}</span>
-            </td>
-            <td>
-              <span class="badge rounded-pill bg-light text-dark border">
-                {{ c.phone }}
-              </span>
-            </td>
-            <td class="text-end pe-4">
-              <button 
-                (click)="delete(c.id)" 
-                class="btn btn-outline-danger btn-sm border-0" 
-                title="Excluir Cliente">
-                <i class="bi bi-trash3-fill"></i>
-              </button>
-            </td>
-          </tr>
-        } @empty {
-          <tr>
-            <td colspan="4" class="text-center py-5 text-muted">
-              <i class="bi bi-inbox d-block mb-2" style="font-size: 2rem;"></i>
-              Nenhum cliente cadastrado no momento.
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+      }
+    </tbody>
+  </table>
+
+  <hr>
+
+  <div class="card shadow-sm p-4 mt-4">
+    <h4 class="text-primary mb-3"><i class="bi bi-person-plus-fill"></i> Novo Cliente</h4>
+    
+    <div class="mb-3">
+      <label class="form-label">Nome</label>
+      <input type="text" [(ngModel)]="newCustomer().name" class="form-control" placeholder="Ex: Arthur">
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label">E-mail</label>
+      <input type="email" [(ngModel)]="newCustomer().email" class="form-control" placeholder="arthur@email.com">
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label">Telefone</label>
+      <input type="text" [(ngModel)]="newCustomer().phone" class="form-control" placeholder="(41) 99999-9999">
+    </div>
+
+    <button (click)="save()" class="btn btn-primary w-100">
+      Salvar no Sistema
+    </button>
   </div>
 </div>

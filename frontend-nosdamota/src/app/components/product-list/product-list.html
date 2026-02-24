@@ -1,0 +1,27 @@
+<div class="container mt-4">
+  <h2>Catálogo de Peças (Nós da Mota)</h2>
+  
+  <table class="table table-striped">
+    <thead>
+      <tr><th>Nome</th><th>Preço</th><th>Ações</th></tr>
+    </thead>
+    <tbody>
+      @for (p of products(); track p.id) {
+        <tr>
+          <td>{{ p.name }}</td>
+          <td>{{ p.price | currency:'BRL' }}</td>
+          <td><button class="btn btn-danger btn-sm" (click)="delete(p.id)">Excluir</button></td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <hr>
+
+  <div class="card p-3 shadow-sm">
+    <h4>Novo Produto</h4>
+    <input [(ngModel)]="newProduct().name" placeholder="Nome da peça" class="form-control mb-2">
+    <input [(ngModel)]="newProduct().price" type="number" placeholder="Preço" class="form-control mb-2">
+    <button (click)="save()" class="btn btn-success">Adicionar Produto</button>
+  </div>
+</div>

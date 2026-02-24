@@ -1,12 +1,8 @@
-<app-header></app-header>
+<nav>
+  <button routerLink="/clientes">Clientes</button>
+  <button routerLink="/produtos">Produtos</button>
+  <button routerLink="/novo-pedido">Fazer Pedido 🧶</button>
+  <button routerLink="/pedidos">Histórico de Vendas</button>
+</nav>
 
-<main class="container mt-4">
-  <div class="row g-4">
-    <div class="col-lg-4">
-      <app-customer-form></app-customer-form>
-    </div>
-    <div class="col-lg-8">
-      <app-customer-list></app-customer-list>
-    </div>
-  </div>
-</main>
+<router-outlet></router-outlet>

@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
+@CrossOrigin(origins = "http://localhost:4200")
 public class OrderController {
 
     @Autowired
@@ -23,5 +24,10 @@ public class OrderController {
     @PostMapping
     public Order save(@RequestBody Order order) {
         return orderRepository.save(order);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        orderRepository.deleteById(id);
     }
 }

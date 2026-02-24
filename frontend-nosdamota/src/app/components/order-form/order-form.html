@@ -1,0 +1,55 @@
+<div class="container mt-4">
+  <h3 class="mb-4">🧶 Novo Pedido - Nós da Mota</h3>
+
+  <div class="mb-4">
+    <label class="form-label">Cliente:</label>
+    <select 
+      [(ngModel)]="selectedCustomerId" 
+      class="form-select" 
+      [class.is-invalid]="selectedCustomerId() === null">
+      
+      <option [ngValue]="null">Selecione um cliente...</option>
+      @for (c of customers(); track c.id) {
+        <option [ngValue]="c.id">{{ c.name }}</option>
+      }
+    </select>
+    
+    @if (selectedCustomerId() === null) {
+      <div class="invalid-feedback">É necessário selecionar um cliente para o pedido.</div>
+    }
+  </div>
+
+  <hr>
+
+  <h4 class="mb-3">Selecione os Produtos:</h4>
+  <div class="list-group mb-4">
+    @for (p of products(); track p.id) {
+      <label class="list-group-item d-flex gap-3">
+        <input 
+          class="form-check-input flex-shrink-0" 
+          type="checkbox" 
+          (change)="toggleProduct(p)">
+        <span>
+          <strong>{{ p.name }}</strong>
+          <small class="d-block text-body-secondary">{{ p.price | currency:'BRL' }}</small>
+        </span>
+      </label>
+    } @empty {
+      <p class="text-muted">Nenhum produto cadastrado no catálogo.</p>
+    }
+  </div>
+
+  <div class="card p-3 bg-light shadow-sm">
+    <h5 class="d-flex justify-content-between">
+      <span>Total do Pedido:</span>
+      <span class="text-success">{{ total | currency:'BRL' }}</span>
+    </h5>
+    
+    <button 
+      class="btn btn-primary btn-lg w-100 mt-3" 
+      [disabled]="selectedCustomerId() === null || selectedProductIds().length === 0" 
+      (click)="save()">
+      Finalizar e Salvar Pedido
+    </button>
+  </div>
+</div>
