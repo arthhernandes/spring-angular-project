@@ -30,6 +30,6 @@ public class Order {
     private String description;
     private double price;
     private LocalDateTime date = LocalDateTime.now();
-    private String status = "pending";
+    private String status = "PENDENTE";
 
 }

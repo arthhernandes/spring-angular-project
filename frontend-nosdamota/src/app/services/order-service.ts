@@ -18,4 +18,12 @@ export class OrderService {
     saveOrder(order: any): Observable<Order> {
         return this.http.post<Order>(this.apiUrl, order);
     }
+
+    deleteOrder(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    }
+
+    getStats(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/stats`);
+    }
 }

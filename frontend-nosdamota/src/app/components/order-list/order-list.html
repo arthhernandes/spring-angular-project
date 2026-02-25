@@ -1,28 +1,109 @@
-<h2>Histórico de Pedidos 🧶</h2>
+<div class="container mt-4">
+  <h2 class="mb-4">Painel de Gestão - Nós da Mota 🧶</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Data</th>
-      <th>Cliente</th>
-      <th>Produtos</th>
-      <th>Total</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (order of orders(); track order.id) {
-      <tr>
-        <td>{{ order.date | date:'dd/MM/yyyy HH:mm' }}</td>
-        <td>{{ order.customer.name }}</td>
-        <td>
-          <ul>
-            @for (p of order.product; track p.id) {
-              <li>{{ p.name }}</li>
-            }
-          </ul>
-        </td>
-        <td><strong>{{ order.price | currency:'BRL' }}</strong></td>
-      </tr>
-    }
-  </tbody>
-</table>
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="card bg-primary text-white shadow-sm border-0">
+        <div class="card-body">
+          <h6 class="card-title text-uppercase opacity-75">Faturamento Total Bruto</h6>
+          <h2 class="display-6 fw-bold">
+            {{ stats().totalRevenue | currency:'BRL' }}
+          </h2>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="card bg-warning text-dark shadow-sm border-0">
+        <div class="card-body">
+          <h6 class="card-title text-uppercase opacity-75">Peças na Agulha (Pendentes)</h6>
+          <h2 class="display-6 fw-bold">
+            {{ stats().pendingOrders }} <small class="fs-6">encomendas</small>
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-4">
+
+  <div class="mb-3">
+    <label class="form-label fw-bold text-muted">Filtrar por Cliente:</label>
+    <input 
+      type="text" 
+      class="form-control form-control-lg shadow-sm" 
+      placeholder="Digite o nome para pesquisar..."
+      [ngModel]="searchTerm()"
+      (ngModelChange)="searchTerm.set($event)">
+  </div>
+
+  <div class="card bg-light mb-4 border-0 shadow-sm">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 text-muted">Total desta visualização:</h5>
+      <h4 class="text-success fw-bold mb-0">
+        {{ totalFilteredValue() | currency:'BRL' }}
+      </h4>
+    </div>
+  </div>
+
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>Cliente</th>
+          <th>Itens (Peças)</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th class="text-center">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (o of filteredOrders(); track o.id) {
+          <tr>
+            <td><strong>{{ o.customer.name }}</strong></td>
+            
+            <td>
+              @for (p of o.product; track p.id) {
+                <span class="badge rounded-pill border text-dark bg-light me-1 shadow-sm">
+                  {{ p.name }}
+                </span>
+              } @empty {
+                <small class="text-muted italic">Sem itens</small>
+              }
+            </td>
+
+            <td class="fw-bold">{{ o.price | currency:'BRL' }}</td>
+            <td>
+              <span class="badge px-3 py-2" 
+                [ngClass]="{
+                  'bg-warning text-dark': o.status === 'PENDENTE',
+                  'bg-info': o.status === 'PRODUZINDO',
+                  'bg-success': o.status === 'ENTREGUE'
+                }">
+                {{ o.status }}
+              </span>
+            </td>
+            <td>
+              <div class="d-flex justify-content-center gap-1">
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-outline-secondary" (click)="updateStatus(o, 'PENDENTE')">Pendente</button>
+                  <button class="btn btn-outline-info" (click)="updateStatus(o, 'PRODUZINDO')">Produzindo</button>
+                  <button class="btn btn-outline-success" (click)="updateStatus(o, 'ENTREGUE')">Entregar</button>
+                </div>
+                <button class="btn btn-sm btn-danger shadow-sm" (click)="deleteOrder(o)">
+                  <i class="bi bi-trash"></i> Excluir
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="text-center py-4 text-muted">
+              Nenhum pedido encontrado para esta busca.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

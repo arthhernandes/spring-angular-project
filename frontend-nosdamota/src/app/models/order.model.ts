@@ -8,4 +8,5 @@ export interface Order {
   description: string;
   price: number;
   date: string;
+  status: string;
 }
