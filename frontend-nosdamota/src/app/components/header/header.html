@@ -1,12 +1,14 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
   <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="#">
-      <i class="bi bi-flower1 me-2" style="font-size: 1.5rem;"></i>
-      <span class="fw-bold">Nós da Mota</span>
-      <span class="ms-2 badge bg-warning text-dark" style="font-size: 0.6rem;">ATELIÊ</span>
+    <a class="navbar-brand d-flex align-items-center" routerLink="/">
+      <span class="me-2">🧶</span> <strong>Nós da Mota</strong>
     </a>
-    <div class="text-white small">
-      <i class="bi bi-person-circle me-1"></i> Admin Arthur
+    
+    <div class="navbar-nav">
+      <a class="nav-link" routerLink="/clientes" routerLinkActive="active">Clientes</a>
+      <a class="nav-link" routerLink="/produtos" routerLinkActive="active">Produtos</a>
+      <a class="nav-link" routerLink="/novo-pedido" routerLinkActive="active">Novo Pedido</a>
+      <a class="nav-link" routerLink="/pedidos" routerLinkActive="active">Histórico</a>
     </div>
   </div>
 </nav>
