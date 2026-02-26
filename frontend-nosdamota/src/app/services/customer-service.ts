@@ -19,8 +19,8 @@ export class CustomerService {
     return this.http.post<Customer>(this.apiUrl, customer);
   }
 
-  deleteCustomer(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  deleteCustomer(id: number): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text'});
   }
   
 }
