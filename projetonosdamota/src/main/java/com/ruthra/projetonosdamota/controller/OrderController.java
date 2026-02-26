@@ -22,7 +22,7 @@ public class OrderController {
 
     @GetMapping
     public List<Order> findAll() {
-        return orderRepository.findAll();
+        return orderRepository.findAllWithDetails();
     }
 
     @PostMapping

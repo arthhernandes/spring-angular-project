@@ -60,17 +60,17 @@
       <tbody>
         @for (o of filteredOrders(); track o.id) {
           <tr>
-            <td><strong>{{ o.customer.name }}</strong></td>
-            
-            <td>
-              @for (p of o.product; track p.id) {
-                <span class="badge rounded-pill border text-dark bg-light me-1 shadow-sm">
-                  {{ p.name }}
-                </span>
-              } @empty {
-                <small class="text-muted italic">Sem itens</small>
-              }
-            </td>
+            <td><strong>{{ o.customer?.name || 'Cliente não carregado' }}</strong></td>
+
+<td>
+  @for (p of o.product; track p.id) {
+    <span class="badge rounded-pill border text-dark bg-light me-1 shadow-sm">
+      {{ p.name }}
+    </span>
+  } @empty {
+    <small class="text-muted">Sem itens</small>
+  }
+</td>
 
             <td class="fw-bold">{{ o.price | currency:'BRL' }}</td>
             <td>
