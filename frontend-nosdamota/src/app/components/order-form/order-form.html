@@ -40,16 +40,16 @@
   </div>
 
   <div class="card p-3 bg-light shadow-sm">
-    <h5 class="d-flex justify-content-between">
-      <span>Total do Pedido:</span>
-      <span class="text-success">{{ total | currency:'BRL' }}</span>
-    </h5>
-    
-    <button 
-      class="btn btn-primary btn-lg w-100 mt-3" 
-      [disabled]="selectedCustomerId() === null || selectedProductIds().length === 0" 
-      (click)="save()">
-      Finalizar e Salvar Pedido
-    </button>
-  </div>
+  <h5 class="d-flex justify-content-between">
+    <span>Total do Pedido:</span>
+    <span class="text-success">{{ total() | currency:'BRL' }}</span>
+  </h5>
+  
+  <button 
+    class="btn btn-primary btn-lg w-100 mt-3" 
+    [disabled]="selectedCustomerId() === null || selectedProducts().length === 0" 
+    (click)="save()">
+    Finalizar e Salvar Pedido
+  </button>
+</div>
 </div>

@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Customer } from '../../models/customer.model';
 import { Product } from '../../models/product.model';
 import { ProductService } from '../../services/product-service';
 import { CustomerService } from '../../services/customer-service';
 import { OrderService } from '../../services/order-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-form',
@@ -20,9 +21,18 @@ export class OrderForm implements OnInit {
   products = signal<Product[]>([]);
 
   selectedCustomerId = signal<number | null>(null);
-  selectedProductIds = signal<Product[]>([]);
+  selectedProducts = signal<Product[]>([]);
 
-  constructor(private customerService: CustomerService, private productService: ProductService, private orderService: OrderService) {}
+  total = computed(() => {
+    return this.selectedProducts().reduce((sum, product) => sum + (product.price || 0), 0);
+  });
+
+  constructor(
+    private customerService: CustomerService, 
+    private productService: ProductService, 
+    private orderService: OrderService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.customerService.getCustomers().subscribe(data => this.customers.set(data));
@@ -30,7 +40,7 @@ export class OrderForm implements OnInit {
   }
 
   toggleProduct(product: Product): void {
-    this.selectedProductIds.update(current => {
+    this.selectedProducts.update(current => {
       const exists = current.find(p => p.id === product.id);
       if (exists) {
         return current.filter(p => p.id !== product.id);
@@ -40,26 +50,32 @@ export class OrderForm implements OnInit {
     });
   }
 
-  get total(): number {
-    return this.selectedProductIds().reduce((sum, product) => sum + product.price, 0);
-  }
-
   save() {
-  const newOrder = {
-    customer: { id: this.selectedCustomerId() },
-    product: this.selectedProductIds(), 
-    description: "Pedido personalizado",
-    price: this.total,
-  };
+    if (!this.selectedCustomerId() || this.selectedProducts().length === 0) {
+      alert('Selecione um cliente e ao menos uma peça de crochê! 🧶');
+      return;
+    }
 
-  this.orderService.saveOrder(newOrder).subscribe({
-    next: () => {
-      alert('Pedido do "Nós da Mota" salvo com sucesso!');
-      this.selectedCustomerId.set(null);
-      this.selectedProductIds.set([]);
-    },
-    error: (err) => console.error('Erro ao salvar pedido:', err)
-  });  
-}
+    const newOrder = {
+      customer: { id: this.selectedCustomerId() }, 
+      product: this.selectedProducts().map(p => ({ id: p.id })),
+      description: "Pedido personalizado - Nós da Mota",
+      price: this.total(), 
+      date: new Date().toISOString(),
+      status: "PENDENTE"
+    };
 
+    this.orderService.saveOrder(newOrder).subscribe({
+      next: () => {
+        alert('Pedido do "Nós da Mota" salvo com sucesso! ✅');
+        this.selectedCustomerId.set(null);
+        this.selectedProducts.set([]);
+        this.router.navigate(['/orders']); 
+      },
+      error: (err) => {
+        console.error('Erro ao salvar pedido:', err);
+        alert('Erro ao salvar o pedido. Verifique o console do backend.');
+      }
+    });  
+  }
 }

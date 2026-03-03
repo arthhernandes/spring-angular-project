@@ -60,12 +60,12 @@
       <tbody>
         @for (o of filteredOrders(); track o.id) {
           <tr>
-            <td><strong>{{ o.customer?.name || 'Cliente não carregado' }}</strong></td>
+            <td><strong>{{ o.customerName || 'Cliente não carregado' }}</strong></td>
 
 <td>
-  @for (p of o.product; track p.id) {
+  @for (p of o.productName; track p) {
     <span class="badge rounded-pill border text-dark bg-light me-1 shadow-sm">
-      {{ p.name }}
+      {{ p }}
     </span>
   } @empty {
     <small class="text-muted">Sem itens</small>

@@ -1,10 +1,8 @@
-import { Customer } from "./customer.model";
-import { Product } from "./product.model";
 
 export interface Order {
-  id?: number;
-  customer: Customer;
-  product: Product[];
+  id: number;
+  customerName: string;
+  productName: string[];
   description: string;
   price: number;
   date: string;

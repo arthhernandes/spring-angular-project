@@ -18,11 +18,11 @@ export class OrderList implements OnInit {
   stats = signal({totalRevenue: 0, pendingOrders: 0});
 
   filteredOrders = computed(() => {
-    const term = this.searchTerm().toLowerCase();
+    const term = this.searchTerm().toLowerCase().trim();
     if (!term) return this.orders();
 
     return this.orders().filter(order =>
-      order.customer.name.toLowerCase().includes(term)
+      order.customerName.toLowerCase().includes(term)
     );
   });
 

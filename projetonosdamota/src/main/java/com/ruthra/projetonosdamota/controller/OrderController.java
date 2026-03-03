@@ -1,5 +1,6 @@
 package com.ruthra.projetonosdamota.controller;
 
+import com.ruthra.projetonosdamota.dto.OrderDTO;
 import com.ruthra.projetonosdamota.model.Order;
 import com.ruthra.projetonosdamota.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -21,8 +23,19 @@ public class OrderController {
     private OrderRepository orderRepository;
 
     @GetMapping
-    public List<Order> findAll() {
-        return orderRepository.findAllWithDetails();
+    public List<OrderDTO> findAll() {
+        return orderRepository.findAllWithDetails()
+                .stream()
+                .map(OrderDTO::new)
+                .toList();
+    }
+
+    public Map<String, Double> getGraphData() {
+        return orderRepository.getRevenueByStatus().stream()
+                .collect(Collectors.toMap(
+                        array -> (String) array[0],
+                        array -> (Double) array[1]
+                ));
     }
 
     @PostMapping
