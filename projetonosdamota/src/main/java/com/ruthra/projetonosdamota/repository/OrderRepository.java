@@ -16,5 +16,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT SUM(o.price) FROM Order o")
     Double sumAllRevenue();
 
+    @Query("SELECT o.status, SUM(o.price) FROM Order o GROUP BY o.status")
+    List<Object[]> getRevenueByStatus();
+
     long countByStatus(String status);
 }

@@ -26,4 +26,8 @@ export class OrderService {
     getStats(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/stats`);
     }
+
+    getGraphData(): Observable<Record<string, number>> {
+        return this.http.get<Record<string, number>>(`${this.apiUrl}/graph-data`);
+    }
 }

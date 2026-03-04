@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col-md-6">
       <div class="card bg-warning text-dark shadow-sm border-0">
         <div class="card-body">
@@ -25,25 +25,21 @@
     </div>
   </div>
 
+  <div class="row justify-content-center mb-5">
+  <div class="col-md-5 text-center">
+    <div class="card shadow-sm border-0 p-4">
+      <h5 class="fw-bold mb-4">Resumo Financeiro</h5>
+      <app-revenue-chart></app-revenue-chart>
+    </div>
+  </div>
+</div>
+
   <hr class="my-4">
 
   <div class="mb-3">
     <label class="form-label fw-bold text-muted">Filtrar por Cliente:</label>
-    <input 
-      type="text" 
-      class="form-control form-control-lg shadow-sm" 
-      placeholder="Digite o nome para pesquisar..."
-      [ngModel]="searchTerm()"
-      (ngModelChange)="searchTerm.set($event)">
-  </div>
-
-  <div class="card bg-light mb-4 border-0 shadow-sm">
-    <div class="card-body d-flex justify-content-between align-items-center">
-      <h5 class="mb-0 text-muted">Total desta visualização:</h5>
-      <h4 class="text-success fw-bold mb-0">
-        {{ totalFilteredValue() | currency:'BRL' }}
-      </h4>
-    </div>
+    <input type="text" class="form-control form-control-lg shadow-sm" placeholder="Digite o nome para pesquisar..."
+      [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)">
   </div>
 
   <div class="table-responsive shadow-sm rounded">
@@ -59,51 +55,59 @@
       </thead>
       <tbody>
         @for (o of filteredOrders(); track o.id) {
-          <tr>
-            <td><strong>{{ o.customerName || 'Cliente não carregado' }}</strong></td>
+        <tr>
+          <td><strong>{{ o.customerName || 'Cliente não carregado' }}</strong></td>
 
-<td>
-  @for (p of o.productName; track p) {
-    <span class="badge rounded-pill border text-dark bg-light me-1 shadow-sm">
-      {{ p }}
-    </span>
-  } @empty {
-    <small class="text-muted">Sem itens</small>
-  }
-</td>
+          <td>
+            @for (p of o.productName; track p) {
+            <span class="badge rounded-pill border text-dark bg-light me-1 shadow-sm">
+              {{ p }}
+            </span>
+            } @empty {
+            <small class="text-muted">Sem itens</small>
+            }
+          </td>
 
-            <td class="fw-bold">{{ o.price | currency:'BRL' }}</td>
-            <td>
-              <span class="badge px-3 py-2" 
-                [ngClass]="{
+          <td class="fw-bold">{{ o.price | currency:'BRL' }}</td>
+          <td>
+            <span class="badge px-3 py-2" [ngClass]="{
                   'bg-warning text-dark': o.status === 'PENDENTE',
                   'bg-info': o.status === 'PRODUZINDO',
                   'bg-success': o.status === 'ENTREGUE'
                 }">
-                {{ o.status }}
-              </span>
-            </td>
-            <td>
-              <div class="d-flex justify-content-center gap-1">
-                <div class="btn-group btn-group-sm">
-                  <button class="btn btn-outline-secondary" (click)="updateStatus(o, 'PENDENTE')">Pendente</button>
-                  <button class="btn btn-outline-info" (click)="updateStatus(o, 'PRODUZINDO')">Produzindo</button>
-                  <button class="btn btn-outline-success" (click)="updateStatus(o, 'ENTREGUE')">Entregar</button>
-                </div>
-                <button class="btn btn-sm btn-danger shadow-sm" (click)="deleteOrder(o)">
-                  <i class="bi bi-trash"></i> Excluir
-                </button>
+              {{ o.status }}
+            </span>
+          </td>
+          <td>
+            <div class="d-flex justify-content-center gap-1">
+              <div class="btn-group btn-group-sm">
+                <button class="btn btn-outline-secondary" (click)="updateStatus(o, 'PENDENTE')">Pendente</button>
+                <button class="btn btn-outline-info" (click)="updateStatus(o, 'PRODUZINDO')">Produzindo</button>
+                <button class="btn btn-outline-success" (click)="updateStatus(o, 'ENTREGUE')">Entregar</button>
               </div>
-            </td>
-          </tr>
+              <button class="btn btn-sm btn-danger shadow-sm" (click)="deleteOrder(o)">
+                <i class="bi bi-trash"></i> Excluir
+              </button>
+            </div>
+          </td>
+        </tr>
         } @empty {
-          <tr>
-            <td colspan="5" class="text-center py-4 text-muted">
-              Nenhum pedido encontrado para esta busca.
-            </td>
-          </tr>
+        <tr>
+          <td colspan="5" class="text-center py-4 text-muted">
+            Nenhum pedido encontrado para esta busca.
+          </td>
+        </tr>
         }
       </tbody>
     </table>
+  </div>
+
+  <div class="card bg-light mb-4 border-0 shadow-sm">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 text-muted">Total desta visualização:</h5>
+      <h4 class="text-success fw-bold mb-0">
+        {{ totalFilteredValue() | currency:'BRL' }}
+      </h4>
+    </div>
   </div>
 </div>

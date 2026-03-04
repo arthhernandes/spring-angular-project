@@ -30,11 +30,12 @@ public class OrderController {
                 .toList();
     }
 
+    @GetMapping("/graph-data")
     public Map<String, Double> getGraphData() {
         return orderRepository.getRevenueByStatus().stream()
                 .collect(Collectors.toMap(
                         array -> (String) array[0],
-                        array -> (Double) array[1]
+                        array -> ((Number) array[1]).doubleValue()
                 ));
     }
 
