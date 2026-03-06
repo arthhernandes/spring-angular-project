@@ -1,5 +1,5 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal, ViewChild } from '@angular/core';
 import { Order } from '../../models/order.model';
 import { OrderService } from '../../services/order-service';
 import { FormsModule } from '@angular/forms';
@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
   styleUrl: './order-list.scss',
 })
 export class OrderList implements OnInit {
+
+  @ViewChild(RevenueChart) revenueChart!: RevenueChart;
 
   orders = signal<Order[]>([]);
   searchTerm = signal<string>('');
@@ -47,34 +49,39 @@ export class OrderList implements OnInit {
   }
 
   loadStats() {
-  this.orderService.getStats().subscribe({
-    next: (data) => this.stats.set(data),
-    error: (err) => {
-      console.error('Erro ao buscar estatísticas', err);
-      this.handleAuthError(err); 
-    }
-  });
-}
+    this.orderService.getStats().subscribe({
+      next: (data) => this.stats.set(data),
+      error: (err) => {
+        console.error('Erro ao buscar estatísticas', err);
+        this.handleAuthError(err);
+      }
+    });
+  }
 
   loadOrders() {
-  this.orderService.getOrders().subscribe({
-    next: (data) => this.orders.set(data),
-    error: (err) => {
-      console.error('Erro ao buscar pedidos', err);
-      this.handleAuthError(err);
-    }
-  });
-}
+    this.orderService.getOrders().subscribe({
+      next: (data) => this.orders.set(data),
+      error: (err) => {
+        console.error('Erro ao buscar pedidos', err);
+        this.handleAuthError(err);
+      }
+    });
+  }
 
   updateStatus(order: Order, newStatus: string) {
-    order.status = newStatus;
-
-    this.orderService.saveOrder(order).subscribe({
+    this.orderService.updateOrderStatus(order.id, newStatus).subscribe({
       next: () => {
-        console.log(`Pedido ${order.id} agora está ${newStatus}`);
-        this.refresh();
+        console.log(`Sucesso: Pedido ${order.id} agora está ${newStatus}`);
+        this.refresh(); 
+
+        if (this.revenueChart) {
+          this.revenueChart.refreshChart(); 
+        }
       },
-      error: (err) => console.error('Erro ao atualizar status:', err)
+      error: (err) => {
+        console.error('O Spring recusou a atualização:', err);
+        this.handleAuthError(err);
+      }
     });
   }
 
@@ -94,11 +101,11 @@ export class OrderList implements OnInit {
   }
 
   private handleAuthError(err: any) {
-  if (err.status === 401) {
-    console.warn('Sessão inválida ou banco resetado. Redirecionando...');
-    localStorage.removeItem('auth_token');
-    this.router.navigate(['/login']);
+    if (err.status === 401) {
+      console.warn('Sessão inválida ou banco resetado. Redirecionando...');
+      localStorage.removeItem('auth_token');
+      this.router.navigate(['/login']);
+    }
   }
-}
 
 }

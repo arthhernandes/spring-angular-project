@@ -4,12 +4,12 @@ import { Observable } from "rxjs";
 import { Order } from "../models/order.model";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class OrderService {
     private apiUrl = 'http://localhost:8080/api/orders';
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     getOrders(): Observable<Order[]> {
         return this.http.get<Order[]>(this.apiUrl);
@@ -29,5 +29,9 @@ export class OrderService {
 
     getGraphData(): Observable<Record<string, number>> {
         return this.http.get<Record<string, number>>(`${this.apiUrl}/graph-data`);
+    }
+
+    updateOrderStatus(id: number, status: string): Observable<Order> {
+        return this.http.put<Order>(`${this.apiUrl}/${id}/status`, { status });
     }
 }
