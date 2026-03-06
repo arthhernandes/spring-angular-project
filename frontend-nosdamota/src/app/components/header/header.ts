@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -9,5 +9,12 @@ import { RouterLink } from '@angular/router';
   styleUrl: './header.scss',
 })
 export class Header {
+
+  constructor(private router: Router) {}
+
+  logout() {
+    localStorage.removeItem('auth_token');
+    this.router.navigate(['/login']);
+  }
 
 }

@@ -1,5 +1,7 @@
-<app-header></app-header>
+@if (!router.url.includes('login')) {
+  <app-header></app-header> 
+}
 
-<main class="container mt-4">
+<main>
   <router-outlet></router-outlet>
 </main>

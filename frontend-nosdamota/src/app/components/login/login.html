@@ -1,0 +1,12 @@
+<div class="login-container">
+  <div class="login-box">
+    <h2>Nós da Mota - Acesso</h2>
+    
+    <input [(ngModel)]="loginData.username" name="username" type="text" placeholder="Usuário">
+    <input [(ngModel)]="loginData.password" name="password" type="password" placeholder="Senha">
+    
+    <button (click)="handleLogin()">Entrar</button>
+    
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  </div>
+</div>
