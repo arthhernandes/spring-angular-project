@@ -28,11 +28,11 @@ export class OrderForm implements OnInit {
   });
 
   constructor(
-    private customerService: CustomerService, 
-    private productService: ProductService, 
+    private customerService: CustomerService,
+    private productService: ProductService,
     private orderService: OrderService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.customerService.getCustomers().subscribe(data => this.customers.set(data));
@@ -57,25 +57,29 @@ export class OrderForm implements OnInit {
     }
 
     const newOrder = {
-      customer: { id: this.selectedCustomerId() }, 
+      customer: { id: this.selectedCustomerId() },
       product: this.selectedProducts().map(p => ({ id: p.id })),
       description: "Pedido personalizado - Nós da Mota",
-      price: this.total(), 
+      price: this.total(),
       date: new Date().toISOString(),
       status: "PENDENTE"
     };
 
     this.orderService.saveOrder(newOrder).subscribe({
       next: () => {
-        alert('Pedido do "Nós da Mota" salvo com sucesso! ✅');
-        this.selectedCustomerId.set(null);
-        this.selectedProducts.set([]);
-        this.router.navigate(['/orders']); 
+        alert('Salvo com sucesso! ✅');
+        this.router.navigate(['/pedidos']);
       },
       error: (err) => {
-        console.error('Erro ao salvar pedido:', err);
-        alert('Erro ao salvar o pedido. Verifique o console do backend.');
+        console.error('ERRO DETECTADO:', err);
+        if (err.status === 401 || err.status === 403) {
+          alert('Sua sessão expirou ou o banco resetou! Faça login novamente. 🔒');
+          localStorage.removeItem('auth_token');
+          this.router.navigate(['/login']);
+        } else {
+          alert('Erro técnico: ' + err.message);
+        }
       }
-    });  
+    });
   }
 }

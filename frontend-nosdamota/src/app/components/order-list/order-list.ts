@@ -4,6 +4,7 @@ import { Order } from '../../models/order.model';
 import { OrderService } from '../../services/order-service';
 import { FormsModule } from '@angular/forms';
 import { RevenueChart } from '../revenue-chart/revenue-chart';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-list',
@@ -31,7 +32,10 @@ export class OrderList implements OnInit {
     return this.filteredOrders().reduce((sum, order) => sum + order.price, 0);
   });
 
-  constructor(private orderService: OrderService) { }
+  constructor(
+    private orderService: OrderService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.refresh();
@@ -43,15 +47,24 @@ export class OrderList implements OnInit {
   }
 
   loadStats() {
-    this.orderService.getStats().subscribe({
-      next: (data) => this.stats.set(data),
-      error: (err) => console.error('Erro ao buscar estatísticas', err)
-    });
-  }
+  this.orderService.getStats().subscribe({
+    next: (data) => this.stats.set(data),
+    error: (err) => {
+      console.error('Erro ao buscar estatísticas', err);
+      this.handleAuthError(err); 
+    }
+  });
+}
 
   loadOrders() {
-    this.orderService.getOrders().subscribe(data => this.orders.set(data));
-  }
+  this.orderService.getOrders().subscribe({
+    next: (data) => this.orders.set(data),
+    error: (err) => {
+      console.error('Erro ao buscar pedidos', err);
+      this.handleAuthError(err);
+    }
+  });
+}
 
   updateStatus(order: Order, newStatus: string) {
     order.status = newStatus;
@@ -79,5 +92,13 @@ export class OrderList implements OnInit {
       });
     }
   }
+
+  private handleAuthError(err: any) {
+  if (err.status === 401) {
+    console.warn('Sessão inválida ou banco resetado. Redirecionando...');
+    localStorage.removeItem('auth_token');
+    this.router.navigate(['/login']);
+  }
+}
 
 }
