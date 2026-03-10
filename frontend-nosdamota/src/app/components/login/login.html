@@ -1,12 +1,22 @@
-<div class="login-container">
-  <div class="login-box">
-    <h2>Nós da Mota - Acesso</h2>
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="brand">
+      <h1>Nós da Mota 🧶</h1>
+      <p>Gestão de Encomendas</p>
+    </div>
     
-    <input [(ngModel)]="loginData.username" name="username" type="text" placeholder="Usuário">
-    <input [(ngModel)]="loginData.password" name="password" type="password" placeholder="Senha">
+    <div class="input-group">
+      <label>Usuário</label>
+      <input [(ngModel)]="loginData.username" name="username" type="text" placeholder="Digite seu usuário">
+    </div>
+
+    <div class="input-group">
+      <label>Senha</label>
+      <input [(ngModel)]="loginData.password" name="password" type="password" placeholder="Digite sua senha">
+    </div>
     
-    <button (click)="handleLogin()">Entrar</button>
+    <button class="btn-login" (click)="handleLogin()">Entrar</button>
     
-    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+    <p *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</p>
   </div>
 </div>
