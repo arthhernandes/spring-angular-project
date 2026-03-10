@@ -26,4 +26,16 @@ public class AuthController {
         userRepository.save(user);
         return ResponseEntity.ok("Register successfully");
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+        return userRepository.findByUsername(loginRequest.getUsername())
+                .map(user -> {
+                    if (user.getPassword().equals(loginRequest.getPassword())) {
+                        return ResponseEntity.ok().body("{\"token\": \"token-fake-nos-da-mota\"}");
+                    }
+                    return ResponseEntity.status(401).body("Senha incorreta");
+                })
+                .orElse(ResponseEntity.status(401).body("Usuário não encontrado"));
+    }
 }

@@ -1,12 +1,12 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authToken = localStorage.getItem('auth_token');
+  const token = localStorage.getItem('auth_token');
 
-  if (authToken) {
+  if (token) {
     const authReq = req.clone({
       setHeaders: {
-        Authorization: `Basic ${authToken}`
+        Authorization: 'Basic ' + btoa('arthurito:motinha')
       }
     });
     return next(authReq);

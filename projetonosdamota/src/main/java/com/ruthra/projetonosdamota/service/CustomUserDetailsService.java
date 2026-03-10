@@ -18,12 +18,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         User userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
+                .orElseThrow(() -> {
+                    System.out.println("ERRO: Usuário não encontrado no Postgres!");
+                    return new UsernameNotFoundException("Não achei");
+                });
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(userEntity.getUsername())
                 .password(userEntity.getPassword())
-                .authorities(userEntity.getRole())
+                .roles("ADMIN")
                 .build();
     }
 }
