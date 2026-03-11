@@ -2,6 +2,7 @@ package com.ruthra.projetonosdamota.controller;
 
 import com.ruthra.projetonosdamota.model.User;
 import com.ruthra.projetonosdamota.repository.UserRepository;
+import com.ruthra.projetonosdamota.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,9 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -32,7 +36,9 @@ public class AuthController {
         return userRepository.findByUsername(loginRequest.getUsername())
                 .map(user -> {
                     if (user.getPassword().equals(loginRequest.getPassword())) {
-                        return ResponseEntity.ok().body("{\"token\": \"token-fake-nos-da-mota\"}");
+                        String token = tokenService.generateToken(user);
+
+                        return ResponseEntity.ok().body("{\"token\": \"" + token + "\"}");
                     }
                     return ResponseEntity.status(401).body("Senha incorreta");
                 })

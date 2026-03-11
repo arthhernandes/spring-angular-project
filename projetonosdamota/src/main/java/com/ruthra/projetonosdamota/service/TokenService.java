@@ -1,10 +1,9 @@
 package com.ruthra.projetonosdamota.service;
 
+import com.ruthra.projetonosdamota.model.User;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -17,7 +16,7 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToker(User user) {
+    public String generateToken(User user) {
         try {
             SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 
@@ -32,7 +31,7 @@ public class TokenService {
         }
     }
 
-    public String validateToker(String token) {
+    public String validateToken(String token) {
         try {
             SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 
@@ -46,6 +45,5 @@ public class TokenService {
             return null;
         }
     }
-
 
 }

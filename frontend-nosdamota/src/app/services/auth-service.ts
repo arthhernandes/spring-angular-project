@@ -9,17 +9,16 @@ import { environment } from '../../environments/environment';
 export class AuthService {
 
   private http = inject(HttpClient);
-  // No AuthService
   private readonly login_url = `${environment.LOGIN_URL}/login`;
   
-  login(loginData: any): Observable<any> {
-    return this.http.post<any>(this.login_url, loginData).pipe(
-      tap(res => {
-        if (res && res.token) {
-          localStorage.setItem('auth_token', res.token);
-        }
-      })
-    );
+  login(loginData: { username: string; password: string }): Observable<any> {
+  return this.http.post<any>(this.login_url, loginData).pipe(
+    tap(res => {
+      if (res && res.token) {
+        localStorage.setItem('auth_token', res.token);
+      }
+    })
+  );
   }
 
   logout() {
