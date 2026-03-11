@@ -1,16 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login {
+export class Login implements OnInit {
 
   loginData = {
     username: '',
@@ -18,11 +19,19 @@ export class Login {
   };
 
   errorMessage: string = '';
+  sessionExpired: boolean = false;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService
-  ) { }
+  private authService = inject(AuthService);
+  private router = inject(Router); 
+  private route = inject(ActivatedRoute)
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['expired']) {
+        this.sessionExpired = true;
+      }
+    });
+  }
 
   handleLogin() {
     this.authService.login(this.loginData).subscribe({
@@ -31,6 +40,7 @@ export class Login {
         this.router.navigate(['/pedidos']);
       },
       error: (err) => {
+        this.sessionExpired = false;
         this.errorMessage = "Usuário ou senha inválidos!";
       }
     });

@@ -23,7 +23,7 @@ public class TokenService {
             return Jwts.builder()
                     .subject(user.getUsername())
                     .issuedAt(new Date())
-                    .expiration(new Date(System.currentTimeMillis() + 86400000))
+                    .expiration(new Date(System.currentTimeMillis() + 3600 * 1000))
                     .signWith(key)
                     .compact();
         }catch (Exception e){

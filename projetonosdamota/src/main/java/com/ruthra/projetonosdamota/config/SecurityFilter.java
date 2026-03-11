@@ -40,7 +40,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 
                 if (userOptional.isPresent()) {
                     UserDetails user = userOptional.get();
-                    System.out.println("DEBUG: Usuário encontrado no banco: " + user.getUsername());
 
                     var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -53,7 +52,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             }
         }
 
-        filterChain.doFilter(request, response);    
+        filterChain.doFilter(request, response);
     }
 
     private String recoverToken(HttpServletRequest request) {

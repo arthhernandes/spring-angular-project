@@ -2,8 +2,6 @@ package com.ruthra.projetonosdamota.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,7 +18,7 @@ public class Order {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "order_products",
             joinColumns = @JoinColumn(name = "order_id"),

@@ -2,7 +2,7 @@
 export interface Order {
   id: number;
   customerName: string;
-  productName: string[];
+  productNames: string[];
   description: string;
   price: number;
   date: string;

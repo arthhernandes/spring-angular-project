@@ -4,6 +4,10 @@
       <h1>Nós da Mota 🧶</h1>
       <p>Gestão de Encomendas</p>
     </div>
+
+    <div *ngIf="sessionExpired" class="alert alert-warning animate-fade-in">
+      <small>⚠️ Sua sessão expirou. Por favor, entre novamente.</small>
+    </div>
     
     <div class="input-group">
       <label>Usuário</label>
@@ -12,7 +16,7 @@
 
     <div class="input-group">
       <label>Senha</label>
-      <input [(ngModel)]="loginData.password" name="password" type="password" placeholder="Digite sua senha">
+      <input [(ngModel)]="loginData.password" name="password" type="password" placeholder="Digite sua senha" (keyup.enter)="handleLogin()">
     </div>
     
     <button class="btn-login" (click)="handleLogin()">Entrar</button>

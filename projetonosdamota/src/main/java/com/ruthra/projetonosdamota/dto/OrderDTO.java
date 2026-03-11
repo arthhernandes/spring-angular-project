@@ -18,7 +18,8 @@ public record OrderDTO(
         this(
                 order.getId(),
                 order.getCustomer() != null ? order.getCustomer().getName() : "Cliente não identificado",
-                order.getProduct() != null ? order.getProduct().stream().map(Product::getName).collect(Collectors.toList()) : List.of(),
+                order.getProduct() != null ?
+                        order.getProduct().stream().map(Product::getName).toList() : List.of(),
                 order.getPrice(),
                 order.getStatus() != null ? order.getStatus() : "Pendente"
         );

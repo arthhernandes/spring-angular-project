@@ -21,9 +21,12 @@ public class SecurityConfig {
     @Autowired
     private SecurityFilter securityFilter;
 
+    @Autowired
+    private CustomAuthenticationEntryPoint authEntryPoint;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -31,12 +34,16 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
                         .requestMatchers("/api/customer/**").authenticated()
+                        .requestMatchers("/api/orders/**").authenticated()
+                        .requestMatchers("/api/product/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
