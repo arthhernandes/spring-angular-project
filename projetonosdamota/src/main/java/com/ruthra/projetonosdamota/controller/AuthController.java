@@ -35,7 +35,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody User loginRequest) {
         return userRepository.findByUsername(loginRequest.getUsername())
                 .map(user -> {
-                    if (user.getPassword().equals(loginRequest.getPassword())) {
+                    if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
                         String token = tokenService.generateToken(user);
 
                         return ResponseEntity.ok().body("{\"token\": \"" + token + "\"}");

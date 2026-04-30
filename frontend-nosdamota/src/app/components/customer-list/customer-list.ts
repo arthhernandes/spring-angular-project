@@ -38,7 +38,7 @@ export class CustomerList implements OnInit {
 
     this.service.saveCustomer(this.newCustomer()).subscribe({
       next: () => {
-        alert('Cliente Arthur, ops... Cliente cadastrado com sucesso!');
+        alert('Cliente cadastrado com sucesso!');
         this.newCustomer.set({ name: '', email: '', phone: '' }); // Limpa o form
         this.loadCustomers(); // Atualiza a lista
       },
