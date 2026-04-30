@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 export class AuthService {
 
   private http = inject(HttpClient);
-  private readonly login_url = `${environment.API_URL}/login`;
+  private readonly login_url = `${environment.API_URL}/api/users/login`;
   
   login(loginData: { username: string; password: string }): Observable<any> {
   return this.http.post<any>(this.login_url, loginData).pipe(
