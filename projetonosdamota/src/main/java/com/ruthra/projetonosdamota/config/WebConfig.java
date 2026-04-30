@@ -10,8 +10,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4200", "https://6fc5aa8e.nos-da-mota-front-spring.pages.dev", "nos-da-mota-front-spring.pages.dev")
+                .allowedOrigins("http://localhost:4200", "https://6fc5aa8e.nos-da-mota-front-spring.pages.dev", "https://nos-da-mota-front-spring.pages.dev")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*");
+                .allowedHeaders("Authorization", "Content-Type", "Accept") // Headers que o Angular envia
+                .allowCredentials(true);
     }
 }
